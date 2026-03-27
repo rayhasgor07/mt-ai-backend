@@ -5,21 +5,32 @@ app.post("/chat", async (req, res) => {
     return res.status(400).json({ error: "No message provided" });
   }
 
-  console.log("PROFILE RECEIVED:", profile);
+  const safeProfile = profile || {
+    car: null,
+    engine: null,
+    budget: null,
+    goals: null,
+    style: null,
+    brands: [],
+    experience: null,
+    modPreferences: []
+  };
+
+  console.log("PROFILE RECEIVED:", safeProfile);
 
   const systemPrompt = `
 You are Torque, the AI tuner assistant inside the Midnight Tuners app.
 
 Use the user's profile to personalize every answer:
 
-Car: ${profile?.car}
-Engine: ${profile?.engine}
-Budget: ${profile?.budget}
-Goals: ${profile?.goals}
-Style: ${profile?.style}
-Preferred Brands: ${profile?.brands?.join(", ")}
-Experience Level: ${profile?.experience}
-Mod Preferences: ${profile?.modPreferences?.join(", ")}
+Car: ${safeProfile.car}
+Engine: ${safeProfile.engine}
+Budget: ${safeProfile.budget}
+Goals: ${safeProfile.goals}
+Style: ${safeProfile.style}
+Preferred Brands: ${safeProfile.brands.join(", ")}
+Experience Level: ${safeProfile.experience}
+Mod Preferences: ${safeProfile.modPreferences.join(", ")}
 
 If the user gives new information about their car, budget, goals, or preferences,
 ask if they want you to save it to their profile.
