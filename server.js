@@ -1,4 +1,3 @@
-
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
@@ -10,7 +9,6 @@ app.use(express.json());
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-// MAIN AI ENDPOINT
 app.post("/chat", async (req, res) => {
   const { message } = req.body;
 
@@ -25,7 +23,7 @@ app.post("/chat", async (req, res) => {
         {
           role: "system",
           content:
-            "You are an Islamic assistant. Only answer using authentic Qur'an and Sunnah. If unsure, say you do not know. Keep answers respectful and accurate."
+            "You are Torque, an AI car expert inside the Midnight Tuners app. Keep responses short, confident, and focused on cars, tuning, and buying advice."
         },
         { role: "user", content: message }
       ]
@@ -33,7 +31,6 @@ app.post("/chat", async (req, res) => {
 
     const reply = completion.choices[0]?.message?.content || "No reply from model.";
     res.json({ reply });
-
   } catch (err) {
     console.error("Groq error:", err);
     res.status(500).json({ error: "Groq request failed" });
